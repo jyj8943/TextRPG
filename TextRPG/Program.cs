@@ -1,4 +1,6 @@
-﻿namespace TextRPG
+﻿using System.ComponentModel;
+
+namespace TextRPG
 {
 
     public class Player
@@ -139,6 +141,8 @@
             // 아이템 정보 초기화 함수
             InitItems();
             player.Inventory.Add(items[1]);
+            player.Inventory.Add(items[5]);
+            //player.Inventory[1].isEquipe = true;
         }
 
         static private void StartMenu()
@@ -212,6 +216,9 @@
         static private void ViewPlayerStatus()
         {
             int userInput = -1;
+            int atkSum = 0;
+            int defSum = 0;
+
             bool isInput = false;
 
             Console.Clear();
@@ -221,11 +228,43 @@
             Console.ResetColor();
 
             Console.WriteLine("캐릭터의 정보가 표시됩니다.\n");
-
             Console.WriteLine("Lv. {0}", player.Level);
             Console.WriteLine("Chad ( " + player.PlayerName + " )");
-            Console.WriteLine("공격력: " + player.Atk);
-            Console.WriteLine("방어력: " + player.Def);
+            
+            // 아이템 장착 여부에 따라 정보 반영이 달라짐 => 장착한 아이템이 있으면 강 스텟 오른쪽에 괄호로 표시되어야 함
+            foreach (var item in player.Inventory)
+            {
+                if (item.isEquipe)
+                {
+                    atkSum += item.Atk;
+                }
+            }
+            if (atkSum == 0)
+            {
+                Console.WriteLine("공격력: " + player.Atk);
+            }
+            else if (atkSum != 0)
+            {
+                Console.WriteLine("공격력: " + player.Atk + "( +" + atkSum + ")");
+            }
+
+
+            foreach (var item in player.Inventory)
+            {
+                if (item.isEquipe)
+                {
+                    defSum += item.Def;
+                }
+            }
+            if (defSum == 0)
+            {
+                Console.WriteLine("방어력: " + player.Def);
+            }
+            else if (defSum != 0)
+            {
+                Console.WriteLine("방어력: " + player.Def + " ( +" + defSum + ")");
+            }
+
             Console.WriteLine("체력: " + player.Hp);
             Console.WriteLine("Gold: " + player.Gold + " G");
             Console.WriteLine("\n0. 나가기");
@@ -348,51 +387,134 @@
         static private void ManagePlayerEquipment()
         {
             bool isManage = true;
-            Console.Clear();
+            bool isStay = false;
+            int inventoryCount = player.Inventory.Count;
+            int userInput = -1;
 
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine("인벤토리 - 장착 관리");
-            Console.ResetColor();
+            do
+            {
+                Console.Clear();
 
-            Console.WriteLine("보유 중인 아이템들을 관리할 수 있습니다.\n");
-            Console.WriteLine("\n[ 아이템 목록 ]");
-            ShowPlayerInventory(isManage);
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine("인벤토리 - 장착 관리");
+                Console.ResetColor();
 
-            Console.WriteLine("\n0. 나가기\n");
-            Console.WriteLine("원하시는 행동을 입력해주세요.");
-            Console.Write(">>> ");
+                Console.WriteLine("보유 중인 아이템들을 관리할 수 있습니다.\n");
+                Console.WriteLine("\n[ 아이템 목록 ]");
+                ShowPlayerInventory(isManage);
+
+                    Console.WriteLine("\n0. 나가기\n");
+                    Console.WriteLine("원하시는 행동을 입력해주세요.");
+                    Console.Write(">>> ");
+
+                    try
+                    {
+                        var input = Console.ReadLine();
+
+                        // 입력이 null이거나 공백일 경우 처리
+                        if (string.IsNullOrWhiteSpace(input))
+                        {
+                            Console.WriteLine("\n입력이 비어 있습니다.");
+                            continue;
+                        }
+                        else
+                        {
+                            userInput = int.Parse(input);
+                        }
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("\n정수를 입력해 주세요.");
+                        continue;
+                    }
+                    catch (OverflowException)
+                    {
+                        Console.WriteLine("\n입력한 숫자가 너무 큽니다.");
+                        continue;
+                    }
+
+                    if (userInput == 0)
+                    {
+                        isStay = true;
+                        ViewPlayerInventory();
+                        break;
+                    }
+                    else if (player.Inventory.Count > 0 && userInput > 0)
+                    {
+                        if (userInput <= player.Inventory.Count)
+                        {
+                            // 아이템 장착 및 해제 메소드
+                            EquipOrUnequip(userInput);
+                            Console.WriteLine(userInput + "번 장비를 장착 또는 해제하였습니다.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("잘못된 숫자입니다.");
+                        }
+                    }
+            } while (!isStay);
+        }
+
+        static public void CalculatePlayerStatus(int itemNum, bool isEquipe)
+        {
+            // 장착됐으면
+            if (isEquipe)
+            {
+                player.Atk += player.Inventory[itemNum - 1].Atk;
+                player.Def += player.Inventory[itemNum - 1].Def;
+            }
+            // 해제됐으면
+            else if (!isEquipe)
+            {
+                player.Atk -= player.Inventory[itemNum - 1].Atk;
+                player.Def -= player.Inventory[itemNum - 1].Def;
+            }
+        }
+
+        static private void EquipOrUnequip(int itemNum)
+        {
+            if (player.Inventory[itemNum - 1].isEquipe)
+            {
+                player.Inventory[itemNum - 1].isEquipe = false;
+                CalculatePlayerStatus(itemNum, player.Inventory[itemNum - 1].isEquipe);
+            }
+            else if (!player.Inventory[itemNum - 1].isEquipe)
+            {
+                player.Inventory[itemNum - 1].isEquipe = true;
+                CalculatePlayerStatus(itemNum, player.Inventory[itemNum - 1].isEquipe);
+            }
         }
 
         static private void ShowPlayerInventory(bool isManage)
         {
-            if (!isManage)
+            if (isManage)
             { 
+                int i = 1;
                 foreach (var item in player.Inventory)
                 {
-                    int i = 0;
 
                     if (item.isEquipe == false)
                     {
                         Console.Write(" - " + i + " " + item.ItemName + "    " + " | ");
 
-                        if (item.ItemType == 0)
+                        if (item.ItemType == 1)
                         {
                             Console.WriteLine("방어력 +" + item.Def + " | " + item.ItemDescription);
                         }
-                        else if (item.ItemType == 1) 
+                        else if (item.ItemType == 2) 
                         {
                             Console.WriteLine("공격력 +" + item.Atk + " | " + item.ItemDescription);
                         }
                     }
                     else if (item.isEquipe == true)
                     {
-                        Console.Write(" - [E]" + i + " " + item.ItemName + "    " + " | ");
+                        Console.Write(" - " + i + " [E]" + " " + item.ItemName + "    " + " | ");
 
-                        if (item.ItemType == 0)
+                        if (item.ItemType == 1)
                         {
                             Console.WriteLine("방어력 +" + item.Def + " | " + item.ItemDescription);
                         }
-                        else if (item.ItemType == 1)
+                        else if (item.ItemType == 2)
                         {
                             Console.WriteLine("공격력 +" + item.Atk + " | " + item.ItemDescription);
                         }
@@ -408,11 +530,11 @@
                     {
                         Console.Write(" - " + item.ItemName + "    " + " | ");
 
-                        if (item.ItemType == 0)
+                        if (item.ItemType == 1)
                         {
                             Console.WriteLine("방어력 +" + item.Def + " | " + item.ItemDescription);
                         }
-                        else if (item.ItemType == 1)
+                        else if (item.ItemType == 2)
                         {
                             Console.WriteLine("공격력 +" + item.Atk + " | " + item.ItemDescription);
                         }
@@ -421,11 +543,11 @@
                     {
                         Console.Write(" - [E] " + item.ItemName + "    " + " | ");
 
-                        if (item.ItemType == 0)
+                        if (item.ItemType == 1)
                         {
                             Console.WriteLine("방어력 +" + item.Def + " | " + item.ItemDescription);
                         }
-                        else if (item.ItemType == 1)
+                        else if (item.ItemType == 2)
                         {
                             Console.WriteLine("공격력 +" + item.Atk + " | " + item.ItemDescription);
                         }
