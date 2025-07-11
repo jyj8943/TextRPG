@@ -141,7 +141,7 @@ namespace TextRPG
             // 아이템 정보 초기화 함수
             InitItems();
             player.Inventory.Add(items[1]);
-            player.Inventory.Add(items[5]);
+            //player.Inventory.Add(items[5]);
             //player.Inventory[1].isEquipe = true;
         }
 
@@ -305,7 +305,9 @@ namespace TextRPG
                         StartMenu();
                         break;
                     case 1:
+                        isInput = true;
                         // 아이템 구매 메소드
+                        BuyItem();
                         break;
                     default:
                         break;
@@ -413,6 +415,150 @@ namespace TextRPG
                         break;
                 }
             } while (!isInput); 
+        }
+
+        static private void BuyItem()
+        {
+            int userInput = -1;
+            bool isInput = false;
+
+            Console.Clear();
+
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("상점 - 아이템 구매");
+            Console.ResetColor();
+            Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
+
+            Console.WriteLine("\n[ 보유 골드 ]");
+            Console.WriteLine(player.Gold + " G");
+
+            Console.WriteLine("\n[ 아이템 목록 ]");
+            PrintItems();
+
+            do
+            {
+                Console.WriteLine("\n0. 나가기");
+                Console.WriteLine("\n원하시는 행동을 입력해주세요.");
+                Console.Write(">>> ");
+
+                try
+                {
+                    var input = Console.ReadLine();
+
+                    // 입력이 null이거나 공백일 경우 처리
+                    if (string.IsNullOrWhiteSpace(input))
+                    {
+                        Console.WriteLine("\n입력이 비어 있습니다.");
+                        continue;
+                    }
+                    else
+                    {
+                        userInput = int.Parse(input);
+                    }
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("\n정수를 입력해 주세요.");
+                    continue;
+                }
+                catch (OverflowException)
+                {
+                    Console.WriteLine("\n입력한 숫자가 너무 큽니다.");
+                    continue;
+                }
+
+                if (userInput == 0)
+                {
+                    isInput = true;
+                    EnterStore();
+                }
+                else if (items.Length > 0 && userInput > 0)
+                {
+                    if (userInput <= items.Length)
+                    {
+                        // 아이템 구매 메소드
+                        PurchaseItems(userInput);
+                    }
+                    else
+                    {
+                        Console.WriteLine("\n잘못된 입력입니다.");
+                    }
+                }
+
+            } while (!isInput);
+        }
+
+        static private void PurchaseItems(int userInput)
+        {
+            foreach (var inventoryItem in player.Inventory)
+            {
+                if (items[userInput - 1].ItemName == inventoryItem.ItemName)
+                {
+                    Console.WriteLine("\n이미 구매한 아이템입니다.");
+                    break;
+                }
+                else
+                {
+                    if (player.Gold >= items[userInput - 1].Gold)
+                    {
+                        Console.WriteLine("\n구매를 완료했습니다.");
+
+                        // 플레이어의 재화 감소 및 인벤토리에 아이템 추가
+                        player.Gold -= items[userInput - 1].Gold;
+                        player.Inventory.Add(items[userInput - 1]);
+
+                        //상점에 구매완료 표시
+                        Console.Clear();
+                        BuyItem();
+                        //PrintItems();
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nGold가 부족합니다.");
+                    }
+                    break;
+                }
+            }
+        }
+
+        static private void PrintItems()
+        {
+            int i = 1;
+            foreach (var item in items)
+            {
+                bool isBuy = false;
+
+                Console.Write(" - " + i + " " + item.ItemName + "    " + " | ");
+
+                if (item.ItemType == 1)
+                {
+                    Console.Write("방어력 +" + item.Def + " | " + item.ItemDescription + "    |  ");
+                }
+                else if (item.ItemType == 2)
+                {
+                    Console.Write("공격력 +" + item.Atk + " | " + item.ItemDescription + "    |  ");
+                }
+
+                foreach (var inventoryItem in player.Inventory)
+                {
+                    if (inventoryItem.ItemName == item.ItemName)
+                    {
+                        isBuy = true;
+                        break;
+                    }
+                }
+
+                if (isBuy)
+                {
+                    Console.WriteLine("구매완료");
+                }
+                else
+                {
+                    Console.WriteLine(item.Gold + " G");
+                }
+
+                i++;
+            }
         }
 
         static private void ViewPlayerInventory()
