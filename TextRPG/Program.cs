@@ -76,6 +76,8 @@ namespace TextRPG
 
             do
             {
+                Console.Clear();
+
                 Console.WriteLine("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
                 Console.WriteLine("\n텍스트 RPG 스파르타 던전에 오신 여러분 환영합니다.");
                 Console.WriteLine("원하시는 이름을 설정해주세요. \n");
@@ -110,12 +112,16 @@ namespace TextRPG
                     }
                     catch (FormatException)
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("\n정수를 입력해 주세요.");
+                        Console.ResetColor();
                         continue;
                     }
                     catch (OverflowException)
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("\n입력한 숫자가 너무 큽니다.");
+                        Console.ResetColor();
                         continue;
                     }
 
@@ -132,7 +138,9 @@ namespace TextRPG
                             isInput = true;
                             break;
                         default:
+                            Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("\n잘못된 숫자입니다.");
+                            Console.ResetColor();
                             break;
                     }
                 } while (!isInput);
@@ -170,7 +178,9 @@ namespace TextRPG
                     // 입력이 null이거나 공백일 경우 처리
                     if (string.IsNullOrWhiteSpace(input))
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("\n입력이 비어 있습니다.");
+                        Console.ResetColor();
                         continue;
                     }
                     else
@@ -180,12 +190,16 @@ namespace TextRPG
                 }
                 catch (FormatException)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("\n정수를 입력해 주세요.");
+                    Console.ResetColor();
                     continue;
                 }
                 catch (OverflowException)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("\n입력한 숫자가 너무 큽니다.");
+                    Console.ResetColor();
                     continue;
                 }
 
@@ -207,7 +221,9 @@ namespace TextRPG
                         EnterStore();
                         break;
                     default:
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("\n잘못된 숫자를 입력하셨습니다.");
+                        Console.ResetColor();
                         break;
                 }
             } while (!isSelect);
@@ -279,7 +295,9 @@ namespace TextRPG
                     // 입력이 null이거나 공백일 경우 처리
                     if (string.IsNullOrWhiteSpace(input))
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("\n입력이 비어 있습니다.");
+                        Console.ResetColor();
                         continue;
                     }
                     else
@@ -289,12 +307,16 @@ namespace TextRPG
                 }
                 catch (FormatException)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("\n정수를 입력해 주세요.");
+                    Console.ResetColor();
                     continue;
                 }
                 catch (OverflowException)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("\n입력한 숫자가 너무 큽니다.");
+                    Console.ResetColor();
                     continue;
                 }
 
@@ -307,6 +329,7 @@ namespace TextRPG
                     case 1:
                         isInput = true;
                         // 아이템 구매 메소드
+                        Console.Clear();
                         BuyItem();
                         break;
                     default:
@@ -385,7 +408,9 @@ namespace TextRPG
                     // 입력이 null이거나 공백일 경우 처리
                     if (string.IsNullOrWhiteSpace(input))
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("\n입력이 비어 있습니다.");
+                        Console.ResetColor();
                         continue;
                     }
                     else
@@ -395,12 +420,16 @@ namespace TextRPG
                 }
                 catch (FormatException)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("\n정수를 입력해 주세요.");
+                    Console.ResetColor();
                     continue;
                 }
                 catch (OverflowException)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("\n입력한 숫자가 너무 큽니다.");
+                    Console.ResetColor();
                     continue;
                 }
 
@@ -411,7 +440,9 @@ namespace TextRPG
                         StartMenu();
                         break;
                     default:
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("\n잘못된 숫자를 입력하셨습니다.");
+                        Console.ResetColor();
                         break;
                 }
             } while (!isInput); 
@@ -422,7 +453,7 @@ namespace TextRPG
             int userInput = -1;
             bool isInput = false;
 
-            Console.Clear();
+            //Console.Clear();
 
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine("상점 - 아이템 구매");
@@ -448,7 +479,9 @@ namespace TextRPG
                     // 입력이 null이거나 공백일 경우 처리
                     if (string.IsNullOrWhiteSpace(input))
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("\n입력이 비어 있습니다.");
+                        Console.ResetColor();
                         continue;
                     }
                     else
@@ -458,12 +491,16 @@ namespace TextRPG
                 }
                 catch (FormatException)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("\n정수를 입력해 주세요.");
+                    Console.ResetColor();
                     continue;
                 }
                 catch (OverflowException)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("\n입력한 숫자가 너무 큽니다.");
+                    Console.ResetColor();
                     continue;
                 }
 
@@ -481,7 +518,9 @@ namespace TextRPG
                     }
                     else
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("\n잘못된 입력입니다.");
+                        Console.ResetColor();
                     }
                 }
 
@@ -490,33 +529,43 @@ namespace TextRPG
 
         static private void PurchaseItems(int userInput)
         {
+            bool isPurchase = false;
+
             foreach (var inventoryItem in player.Inventory)
             {
                 if (items[userInput - 1].ItemName == inventoryItem.ItemName)
                 {
-                    Console.WriteLine("\n이미 구매한 아이템입니다.");
-                    break;
+                    isPurchase = true;
+                }
+            }
+
+            if (isPurchase)
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("\n이미 구매한 아이템입니다.");
+                Console.ResetColor();
+            }
+            else
+            {
+                if (player.Gold >= items[userInput - 1].Gold)
+                {
+
+                    // 플레이어의 재화 감소 및 인벤토리에 아이템 추가
+                    player.Gold -= items[userInput - 1].Gold;
+                    player.Inventory.Add(items[userInput - 1]);
+
+                    //상점에 구매완료 표시
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine("\n구매를 완료했습니다.\n");
+                    Console.ResetColor();
+
+                    BuyItem();
                 }
                 else
                 {
-                    if (player.Gold >= items[userInput - 1].Gold)
-                    {
-                        Console.WriteLine("\n구매를 완료했습니다.");
-
-                        // 플레이어의 재화 감소 및 인벤토리에 아이템 추가
-                        player.Gold -= items[userInput - 1].Gold;
-                        player.Inventory.Add(items[userInput - 1]);
-
-                        //상점에 구매완료 표시
-                        Console.Clear();
-                        BuyItem();
-                        //PrintItems();
-                    }
-                    else
-                    {
-                        Console.WriteLine("\nGold가 부족합니다.");
-                    }
-                    break;
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\nGold가 부족합니다.");
+                    Console.ResetColor();
                 }
             }
         }
@@ -594,7 +643,9 @@ namespace TextRPG
                     // 입력이 null이거나 공백일 경우 처리
                     if (string.IsNullOrWhiteSpace(input))
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("\n입력이 비어 있습니다.");
+                        Console.ResetColor();
                         continue;
                     }
                     else
@@ -604,12 +655,16 @@ namespace TextRPG
                 }
                 catch (FormatException)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("\n정수를 입력해 주세요.");
+                    Console.ResetColor();
                     continue;
                 }
                 catch (OverflowException)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("\n입력한 숫자가 너무 큽니다.");
+                    Console.ResetColor();
                     continue;
                 }
 
@@ -626,7 +681,9 @@ namespace TextRPG
                         ManagePlayerEquipment();
                         break;
                     default:
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("\n잘못된 숫자를 입력하셨습니다.");
+                        Console.ResetColor();
                         break;
                 }
             } while (!isInput);
@@ -662,7 +719,9 @@ namespace TextRPG
                         // 입력이 null이거나 공백일 경우 처리
                         if (string.IsNullOrWhiteSpace(input))
                         {
+                            Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("\n입력이 비어 있습니다.");
+                            Console.ResetColor();
                             continue;
                         }
                         else
@@ -672,12 +731,16 @@ namespace TextRPG
                     }
                     catch (FormatException)
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("\n정수를 입력해 주세요.");
+                        Console.ResetColor();
                         continue;
                     }
                     catch (OverflowException)
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("\n입력한 숫자가 너무 큽니다.");
+                        Console.ResetColor();
                         continue;
                     }
 
@@ -697,7 +760,9 @@ namespace TextRPG
                         }
                         else
                         {
+                            Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("잘못된 숫자입니다.");
+                            Console.ResetColor();
                         }
                     }
             } while (!isStay);
