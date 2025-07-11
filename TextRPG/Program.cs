@@ -204,12 +204,114 @@ namespace TextRPG
                     case 3:
                         Console.WriteLine("\n상점을 선택하셨습니다.");
                         isSelect = true;
+                        EnterStore();
                         break;
                     default:
                         Console.WriteLine("\n잘못된 숫자를 입력하셨습니다.");
                         break;
                 }
             } while (!isSelect);
+
+        }
+
+        static private void EnterStore()
+        {
+            bool isInput = false;
+
+            int userInput = -1;
+
+            do
+            {
+                Console.Clear();
+
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine("상점");
+                Console.ResetColor();
+                Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
+
+                Console.WriteLine("\n[ 보유 골드 ]");
+                Console.WriteLine(player.Gold + " G");
+
+                Console.WriteLine("\n[ 아이템 목록 ]");
+                foreach (var item in items)
+                {
+                    bool isBuy = false;
+
+                    Console.Write(" - " + item.ItemName + "    " + " | ");
+
+                    if (item.ItemType == 1)
+                        {
+                            Console.Write("방어력 +" + item.Def + " | " + item.ItemDescription + "    |  ");
+                        }
+                    else if (item.ItemType == 2)
+                        {
+                            Console.Write("공격력 +" + item.Atk + " | " + item.ItemDescription + "    |  " );
+                        }
+
+                    foreach (var inventoryItem in player.Inventory)
+                    {
+                        if (inventoryItem.ItemName == item.ItemName)
+                        {
+                            isBuy = true;
+                            break;
+                        }
+                    }
+
+                    if (isBuy)
+                    {
+                        Console.WriteLine("구매완료");
+                    }
+                    else
+                    {
+                        Console.WriteLine(item.Gold + " G");
+                    }
+                }
+
+                Console.WriteLine("\n1. 아이템 구매");
+                Console.WriteLine("0. 나가기");
+                Console.WriteLine("\n원하시는 행동을 입력해주세요.");
+                Console.Write(">>> ");
+
+                try
+                {
+                    var input = Console.ReadLine();
+
+                    // 입력이 null이거나 공백일 경우 처리
+                    if (string.IsNullOrWhiteSpace(input))
+                    {
+                        Console.WriteLine("\n입력이 비어 있습니다.");
+                        continue;
+                    }
+                    else
+                    {
+                        userInput = int.Parse(input);
+                    }
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("\n정수를 입력해 주세요.");
+                    continue;
+                }
+                catch (OverflowException)
+                {
+                    Console.WriteLine("\n입력한 숫자가 너무 큽니다.");
+                    continue;
+                }
+
+                switch (userInput)
+                {
+                    case 0:
+                        isInput = true;
+                        StartMenu();
+                        break;
+                    case 1:
+                        // 아이템 구매 메소드
+                        break;
+                    default:
+                        break;
+                }
+
+            } while (!isInput);
 
         }
 
